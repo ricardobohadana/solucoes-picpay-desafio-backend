@@ -20,12 +20,13 @@ module.exports = {
       {
         printWidth: 90,
         tabWidth: 2,
-        singleQuote: true,
+        singleQuote: false,
         trailingComma: "all",
         arrowParens: "always",
         semi: true,
       },
     ],
+    "no-useless-constructor": "off",
   },
   settings: {
     "import/parsers": {
