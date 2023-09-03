@@ -1,16 +1,20 @@
 import { CreateUserUseCase } from "@/application/use-cases/create-user";
 import { TransferUseCase } from "@/application/use-cases/transfer";
 import { UserType } from "@/domain/enums/user-type";
-import { InMemoryAccountRepository } from "@/infra/repositories/in-memory-account-repository";
-import { InMemoryTransactionRepository } from "@/infra/repositories/in-memory-transaction-repository";
-import { InMemoryUserRepository } from "@/infra/repositories/in-memory-user-repository";
+import { NotificationGateway } from "@/application/interfaces/gateway/notification-gateway";
+import { InMemoryAccountRepository } from "@/infra/repositories/in-memory/in-memory-account-repository";
+import { InMemoryTransactionRepository } from "@/infra/repositories/in-memory/in-memory-transaction-repository";
+import { InMemoryUserRepository } from "@/infra/repositories/in-memory/in-memory-user-repository";
 import { describe, it, beforeEach, expect } from "vitest";
+import { TransferAuthorizationGateway } from "@/application/interfaces/gateway/transfer-auth-gateway";
 
 describe("Transfer use case", () => {
   let accountRepository: InMemoryAccountRepository;
   let transactionRepository: InMemoryTransactionRepository;
   let userRepository: InMemoryUserRepository;
   let createUserUseCase: CreateUserUseCase;
+  let notificationGateway: NotificationGateway;
+  let transferAuthorizationGateway: TransferAuthorizationGateway;
   let sut: TransferUseCase;
 
   beforeEach(async () => {
@@ -18,7 +22,20 @@ describe("Transfer use case", () => {
     transactionRepository = new InMemoryTransactionRepository();
     userRepository = new InMemoryUserRepository();
     createUserUseCase = new CreateUserUseCase(userRepository, accountRepository);
-    sut = new TransferUseCase(accountRepository, transactionRepository);
+    transferAuthorizationGateway = {
+      authorize: async () => true,
+    };
+    notificationGateway = {
+      notify: async (message: string) => {
+        console.log(message);
+      },
+    };
+    sut = new TransferUseCase(
+      accountRepository,
+      transactionRepository,
+      notificationGateway,
+      transferAuthorizationGateway,
+    );
 
     const input = {
       cpfOrCnpj: "000.000.000-00",

@@ -1,7 +1,7 @@
 import { CreateUserUseCase } from "@/application/use-cases/create-user";
 import { UserType } from "@/domain/enums/user-type";
-import { InMemoryAccountRepository } from "@/infra/repositories/in-memory-account-repository";
-import { InMemoryUserRepository } from "@/infra/repositories/in-memory-user-repository";
+import { InMemoryAccountRepository } from "@/infra/repositories/in-memory/in-memory-account-repository";
+import { InMemoryUserRepository } from "@/infra/repositories/in-memory/in-memory-user-repository";
 import { expect, describe, it, beforeEach } from "vitest";
 
 describe("Create user use case", async () => {
